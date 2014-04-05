@@ -198,8 +198,35 @@ def output(board):
 				s.append(str(j).center(4))
 		print ' '.join(s) 
 
-#n = int(raw_input("Input a number: \n"))
-print 'name in my2048.py:', __name__
+def copy_board(board):
+  new_board = generate_board()
+  for i in range(0, BOARD_SIZE):
+    for j in range(0, BOARD_SIZE):
+      new_board[i][j] = board[i][j]
+  return new_board
+
+def is_equal(lhs, rhs):
+  for i in range(0, BOARD_SIZE):
+    for j in range(0, BOARD_SIZE):
+      if lhs[i][j] != rhs[i][j]:
+	    return False
+  return True
+
+def move(current_board, next_step):
+	old_board = copy_board(current_board)
+	if next_step == 'a':
+		current_board = left_move(current_board)
+	if next_step == 'd':
+		current_board = right_move(current_board)
+	if next_step == 'w':
+		current_board = up_move(current_board)
+	if next_step == 's':
+		current_board = down_move(current_board)
+	if not is_equal(old_board, current_board):
+		current_board = generate_tile(current_board)
+	return current_board
+
+
 if __name__ == '__main__':
 	current_board = initiate_board(2)	
 	occupied_tile = 2	
@@ -208,16 +235,6 @@ if __name__ == '__main__':
 	next_step = ''
 	while can_move(current_board):
 		next_step = raw_input()
-		if next_step == 'a':
-			current_board = left_move(current_board)
-		if next_step == 'd':
-			current_board = right_move(current_board)
-		if next_step == 'w':
-			current_board = up_move(current_board)
-		if next_step == 's':
-			current_board = down_move(current_board)
-		
+		current_board = move(current_board, next_step)
 		output(current_board)
-		print '\n'
-		current_board = generate_tile(current_board)
-		output(current_board)
+ 
