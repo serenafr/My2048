@@ -1,5 +1,11 @@
 import random
 
+class Move(object):
+  LEFT = 'left'
+  UP = 'up'
+  RIGHT = 'right'
+  DOWN = 'down'
+
 class Board(object):
   
   def __init__(self, n_init_tiles):
@@ -178,10 +184,10 @@ class Board(object):
     return new_board
 
   KEY_MOVE_MAP = {
-    'a' : left_move,
-    'd' : right_move,
-    'w' : up_move,
-    's' : down_move,
+    Move.LEFT : left_move,
+    Move.RIGHT : right_move,
+    Move.UP : up_move,
+    Move.DOWN : down_move,
   }
  
   def generate_tile(self, board):
@@ -230,9 +236,12 @@ class Board(object):
     return True
 
   
-  def move(self, next_step):
+  def move(self, move_action):
+    '''Move the board to the direction specified by move_action
+    
+    move_action should be one of the values in Move enum'''
     old_board = self.copy_board(self.board_data)
-    self.board_data = self.KEY_MOVE_MAP[next_step](self, self.board_data)
+    self.board_data = self.KEY_MOVE_MAP[move_action](self, self.board_data)
     if not self.is_equal(old_board, self.board_data):
       self.board_data = self.generate_tile(self.board_data)
 
