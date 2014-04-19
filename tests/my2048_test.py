@@ -1,5 +1,6 @@
 import sys
-from ..my2048 import board
+sys.path.append('../src')
+import board
 
 test_board = board.Board()
 def test_left_move():
