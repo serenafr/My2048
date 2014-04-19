@@ -2,9 +2,9 @@ import random
 
 class Board(object):
   
-  def __init__(self):
+  def __init__(self, n_init_tiles):
     self.BOARD_SIZE = 4
-    
+    self.board_data = self.initialize_board(n_init_tiles)
 
   def generate_board(self):
     '''Generate a None board'''
@@ -14,7 +14,7 @@ class Board(object):
     '''Generate a line in board'''
     return [None] * self.BOARD_SIZE
 
-  def initiate_board(self, n):
+  def initialize_board(self, n):
     '''Generate a board with n tiles whose value is not None'''
     base_num = self.generate_board()
     index_list = [[i, j] 
@@ -81,41 +81,41 @@ class Board(object):
       return False
       
 
-  def can_move_left(self, board):
-    for line in board:
+  def can_move_left(self):
+    for line in self.board_data:
       if self.can_move_line(line):
         return True
     return False
     
-  def can_move_right(self, board):
+  def can_move_right(self):
     temp_board = self.generate_board()
-    temp_board = self.rotate(self.rotate(board))
+    temp_board = self.rotate(self.rotate(self.board_data))
     for line in temp_board:
       if self.can_move_line(line):
         return True
     return False
     
-  def can_move_up(self, board):
+  def can_move_up(self):
     temp_board = self.generate_board()
-    temp_board = self.rotate(self.rotate(self.rotate(board)))
+    temp_board = self.rotate(self.rotate(self.rotate(self.board_data)))
     for line in temp_board:
       if self.can_move_line(line):
         return True
     return False
     
-  def can_move_down(board):
+  def can_move_down(self):
     temp_board = self.generate_board()
-    temp_board = self.rotate(board)
+    temp_board = self.rotate(self.board_data)
     for line in temp_board:
       if self.can_move_line(line):
         return True
     return False
     
-  def can_move(self, board):
-    return self.can_move_left(board) or \
-        self.can_move_right(board) or \
-        self.can_move_up(board) or \
-        self.can_move_down(board)
+  def can_move(self):
+    return self.can_move_left() or \
+        self.can_move_right() or \
+        self.can_move_up() or \
+        self.can_move_down()
      
   def move_to_beginning(self, line):
     '''Move all the tiles with value to the beginning of the line'''
@@ -204,9 +204,9 @@ class Board(object):
           count = count + 1
     return count
     
-  def output(self, board):
+  def output(self):
     '''print board'''
-    for i in board:
+    for i in self.board_data:
       s = []
       for j in i:
         if j == None:
@@ -230,10 +230,9 @@ class Board(object):
     return True
 
   
-  def move(self, current_board, next_step):
-    old_board = self.copy_board(current_board)
-    current_board = self.KEY_MOVE_MAP[next_step](self, current_board)
-    if not self.is_equal(old_board, current_board):
-      current_board = self.generate_tile(current_board)
-    return current_board
+  def move(self, next_step):
+    old_board = self.copy_board(self.board_data)
+    self.board_data = self.KEY_MOVE_MAP[next_step](self, self.board_data)
+    if not self.is_equal(old_board, self.board_data):
+      self.board_data = self.generate_tile(self.board_data)
 

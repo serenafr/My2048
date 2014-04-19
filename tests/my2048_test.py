@@ -2,7 +2,7 @@ import sys
 sys.path.append('../src')
 import board
 
-test_board = board.Board()
+test_board = board.Board(2)
 def test_left_move():
   board = test_board.generate_board()
   board[0][0] = 2
@@ -12,13 +12,13 @@ def test_left_move():
   assert board[0][0] == 2
   assert board[0][1] == 4
   assert board[0][2] == 2
-  
+
 def test_left_move_unmoveable():
-  board = test_board.generate_board()
-  board[0][0] = 2
-  new_board = copy_board(board)
-  new_board = test_board.move(new_board, 'a')
-  assert is_equal(board, new_board)
+  test_board = board.Board(0)
+  test_board.board_data[0][0] = 2
+  old_board = copy_board(test_board.board_data)
+  test_board.move('a')
+  assert is_equal(old_board, test_board.board_data)
 
 def copy_board(board):
   new_board = test_board.generate_board()
