@@ -11,7 +11,6 @@ class Test_ScoreBoard(unittest.TestCase):
 		test_score_board.add_score(20, 'bbb')
 		self.assertEqual(test_score_board.get_scores()[0].score, 20)
 		self.assertEqual(test_score_board.get_scores()[1].score, 10)
-		print test_score_board.get_scores()
 
 	def test_up_to_ten(self):
 		test_score_board = score_board.Score_Board()
@@ -28,7 +27,6 @@ class Test_ScoreBoard(unittest.TestCase):
 		test_score_board.add_score(150, 'kkk')
 		test_score_board.add_score(250, 'lll')
 		self.assertEqual(len(test_score_board.get_scores()), 10)
-		print test_score_board.get_scores()
 
 	def test_save_scores(self):
 		test_score_board = score_board.Score_Board()
@@ -36,10 +34,12 @@ class Test_ScoreBoard(unittest.TestCase):
 		test_score_board.add_score(20, 'bbb')
 		test_score_board.save_scores('/tmp/testscore.txt')
 		test_file = open('/tmp/testscore.txt', 'r')
-		self.assertEqual(test_file.readline().strip(), 'bbb')
-		self.assertEqual(test_file.readline().strip(), '20')
-		self.assertEqual(test_file.readline().strip(), 'aaa')
-		self.assertEqual(test_file.readline().strip(), '10')
+
+		test_score_board2 = score_board.Score_Board()
+		test_score_board2.load_scores('/tmp/testscore.txt')
+		lst = test_score_board2.get_scores()
+
+		self.assertEqual(test_score_board.get_scores(), lst)
 
 
 if __name__ == '__main__':

@@ -6,6 +6,9 @@ class Score(object):
 	def __repr__(self):
 		return '%s: %d' % (self.name, self.score)
 
+	def __eq__(self, other):
+		return self.name == other.name and self.score == other.score
+
 
 class Score_Board(object):
 	def __init__(self):
@@ -36,3 +39,13 @@ class Score_Board(object):
 			f.write(str(i.score))
 			f.write('\n')
 		f.close()
+
+	def load_scores(self, path):
+		f = open(path, 'r')
+		lines = f.readlines()
+		for i in range(len(lines)):
+			if i % 2 == 0:
+				temp_name = lines[i].strip()
+			else:
+				temp_score = int((lines[i].strip()))
+				self.__score_list.append(Score(temp_name, temp_score))
