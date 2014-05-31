@@ -30,5 +30,17 @@ class Test_ScoreBoard(unittest.TestCase):
 		self.assertEqual(len(test_score_board.get_scores()), 10)
 		print test_score_board.get_scores()
 
+	def test_save_scores(self):
+		test_score_board = score_board.Score_Board()
+		test_score_board.add_score(10, 'aaa')
+		test_score_board.add_score(20, 'bbb')
+		test_score_board.save_scores('/tmp/testscore.txt')
+		test_file = open('/tmp/testscore.txt', 'r')
+		self.assertEqual(test_file.readline().strip(), 'bbb')
+		self.assertEqual(test_file.readline().strip(), '20')
+		self.assertEqual(test_file.readline().strip(), 'aaa')
+		self.assertEqual(test_file.readline().strip(), '10')
+
+
 if __name__ == '__main__':
   unittest.main()

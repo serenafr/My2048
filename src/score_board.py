@@ -27,3 +27,12 @@ class Score_Board(object):
 	def get_scores(self):
 		n_list = self.__score_list
 		return n_list	
+
+	def save_scores(self, path):
+		f = open(path, 'w')
+		for i in self.__score_list:
+			f.write(i.name)
+			f.write('\n')
+			f.write(str(i.score))
+			f.write('\n')
+		f.close()
