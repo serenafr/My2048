@@ -16,6 +16,7 @@ def main():
     next_step = raw_input()
     next_move = KEY_MOVE_MAP[next_step]
     board_object.move(next_move)
+    print board_object.get_score()
     board_object.output()
 
 main()

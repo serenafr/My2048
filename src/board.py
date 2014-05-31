@@ -11,6 +11,7 @@ class Board(object):
   def __init__(self, n_init_tiles):
     self.BOARD_SIZE = 4
     self.board_data = self.initialize_board(n_init_tiles)
+    self.__score = 0
 
   def generate_board(self):
     '''Generate a None board'''
@@ -153,6 +154,7 @@ class Board(object):
               if self.get_through(line, i, j) and line[i] == line[j] and status[i] == False and status[j] == False:
                 line[i] = line[i] + line[j]
                 line[j] = None
+                self.__score = self.__score + line[i]
                 status[i] = True
                 status[j] = True
           board[count] = self.move_to_beginning(line)
@@ -245,3 +247,5 @@ class Board(object):
     if not self.is_equal(old_board, self.board_data):
       self.board_data = self.generate_tile(self.board_data)
 
+  def get_score(self):
+    return self.__score
