@@ -41,7 +41,10 @@ class Score_Board(object):
 		f.close()
 
 	def load_scores(self, path):
-		f = open(path, 'r')
+		try:
+			f = open(path, 'r')
+		except IOError:
+			return
 		lines = f.readlines()
 		for i in range(len(lines)):
 			if i % 2 == 0:
