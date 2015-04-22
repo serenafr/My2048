@@ -1,3 +1,6 @@
+import os.path
+import json
+
 class Score(object):
 	def __init__(self, name, score):
 		self.name = name
@@ -32,23 +35,20 @@ class Score_Board(object):
 		return n_list	
 
 	def save_scores(self, path):
+		dir_name = os.path.dirname(path)
+		if not os.path.exists(dir_name):
+			os.makedirs(dir_name)
 		f = open(path, 'w')
-		for i in self.__score_list:
-			f.write(i.name)
-			f.write('\n')
-			f.write(str(i.score))
-			f.write('\n')
+		jsonobj = [{"name" : i.name, "score" : i.score} for i in self.__score_list]
+		jsonstr = json.dumps(jsonobj)
+		f.write(jsonstr)
 		f.close()
 
 	def load_scores(self, path):
+		self.__score_list = []
 		try:
 			f = open(path, 'r')
 		except IOError:
 			return
-		lines = f.readlines()
-		for i in range(len(lines)):
-			if i % 2 == 0:
-				temp_name = lines[i].strip()
-			else:
-				temp_score = int((lines[i].strip()))
-				self.__score_list.append(Score(temp_name, temp_score))
+		jsonobj = json.load(f)
+		self.__score_list = [Score(i["name"], i["score"]) for i in jsonobj]

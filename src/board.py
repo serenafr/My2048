@@ -223,6 +223,12 @@ class Board(object):
           s.append(str(j).center(4))
       print ' '.join(s) 
 
+  def get_tiles(self):
+    tile_list = []
+    for i in self.board_data:
+      tile_list.append(i)
+    return tile_list
+
   def copy_board(self, board):
     new_board = self.generate_board()
     for i in range(0, self.BOARD_SIZE):
