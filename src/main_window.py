@@ -20,6 +20,8 @@ class My2048_wx(wx.Frame):
 		self.Construct()
 
 	def Construct(self):
+		self.Bind(wx.EVT_CHAR_HOOK, self.arrow_key_ctrl)
+
 		'''panel_box is the container that contains all the widgets'''
 		self.panel_box = wx.BoxSizer(wx.VERTICAL)
 
@@ -29,9 +31,6 @@ class My2048_wx(wx.Frame):
 		self.play_board = wx.GridSizer(self.SIZE, self.SIZE)
 		self.generate_playboard()
 
-		'''User can use these keys to control the move and merge of the tile numbers'''
-		self.ctrl_keys = wx.BoxSizer(wx.VERTICAL)
-		self.generate_ctrlkeys()
 
 		self.SetSizer(self.panel_box)
 		self.Show(True)
@@ -101,45 +100,12 @@ class My2048_wx(wx.Frame):
 					text_list.append(str(tile_list[i][j]))
 
 		for i in range(0, self.SIZE * self.SIZE):
-			self.__label_list.append(ST.GenStaticText(
-				self, 
-				-1, 
-				label = text_list[i],
-				size = (60, 30), 
-				style = wx.ALIGN_CENTRE))
+			self.__label_list.append(ST.GenStaticText(self, -1, label = text_list[i], size = (60, 30), style = wx.ALIGN_CENTRE))
 			self.__label_list[i].SetBackgroundColour((238, 228, 218))
 			self.play_board.Add(self.__label_list[i], flag = wx.EXPAND|wx.RIGHT|wx.TOP, border = 10)
 
 		self.panel_box.Add(
 			self.play_board, flag = wx.EXPAND|wx.TOP|wx.LEFT, border = 10)
-
-	def generate_ctrlkeys(self):
-		self.up_box = wx.BoxSizer()
-		self.up_button = wx.Button(self, -1, label = 'UP', size = (60, 30))
-		self.up_button.Bind(wx.EVT_BUTTON, self.up_button_click)
-		self.up_button.SetToolTip(wx.ToolTip("Click to move up"))
-		self.up_box.Add(self.up_button, flag = wx.EXPAND|wx.LEFT, border = 110)
-		self.ctrl_keys.Add(self.up_box)
-
-		self.left_right_box = wx.GridSizer(1, 2)
-		self.left_button = wx.Button(self, -1, label = 'LEFT', size = (60, 30))
-		self.left_button.Bind(wx.EVT_BUTTON, self.left_button_click)
-		self.left_button.SetToolTip(wx.ToolTip("Click to move left"))
-		self.right_button = wx.Button(self, -1, label = 'RIGHT', size = (60, 30))
-		self.right_button.Bind(wx.EVT_BUTTON, self.right_button_click)
-		self.right_button.SetToolTip(wx.ToolTip("Click to move right"))
-		self.left_right_box.Add(self.left_button, flag = wx.LEFT, border = 80)
-		self.left_right_box.Add(self.right_button, flag = wx.RIGHT)
-		self.ctrl_keys.Add(self.left_right_box)
-
-		self.down_box = wx.BoxSizer()
-		self.down_button = wx.Button(self, -1, label = 'DOWN', size = (60, 30))
-		self.down_button.Bind(wx.EVT_BUTTON, self.down_button_click)
-		self.down_button.SetToolTip(wx.ToolTip("Click to move down"))
-		self.down_box.Add(self.down_button, flag = wx.EXPAND|wx.LEFT, border = 110)
-		self.ctrl_keys.Add(self.down_box)
-
-		self.panel_box.Add(self.ctrl_keys, flag = wx.EXPAND|wx.ALIGN_CENTRE|wx.TOP, border = 10)
 
 	def refresh(self):
 		self.__current_score = board_object.get_score()
@@ -166,25 +132,37 @@ class My2048_wx(wx.Frame):
 			self.__label_list[i].SetLabel(text_list[i])
 		self.play_board.Layout()
 
-	def up_button_click(self, event):
+	def up_move(self):
 		if board_object.can_move():
 			board_object.move('up')
 		self.refresh()
 
-	def down_button_click(self, event):
+	def down_move(self):
 		if board_object.can_move():
 			board_object.move('down')
 		self.refresh()
 
-	def left_button_click(self, event):
+	def left_move(self):
 		if board_object.can_move():
 			board_object.move('left')
 		self.refresh()
 
-	def right_button_click(self, event):
+	def right_move(self):
 		if board_object.can_move():
 			board_object.move('right')
 		self.refresh()
+
+	def arrow_key_ctrl(self, event):
+		if event.GetKeyCode() == wx.WXK_UP:
+			self.up_move()
+		elif event.GetKeyCode() == wx.WXK_DOWN:
+			self.down_move()
+		elif event.GetKeyCode() == wx.WXK_LEFT:
+			self.left_move()
+		elif event.GetKeyCode() == wx.WXK_RIGHT:
+			self.right_move()
+		else:
+			event.Skip()
 
 	def new_game_button_click(self, event):
 		board_object.board_data = board_object.initialize_board(2)
@@ -193,9 +171,10 @@ class My2048_wx(wx.Frame):
 		self.score.SetLabel(str(self.__current_score))
 		self.upper_header.Layout()
 
+
 if __name__ == "__main__":
 	app = wx.App()
 	board_object = board.Board(2)
 	score_board_object = score_board.Score_Board()
-	frame = My2048_wx(None, -1, '2048', (380, 420), board_object, score_board_object)
+	frame = My2048_wx(None, -1, '2048', (380, 300), board_object, score_board_object)
 	app.MainLoop()
