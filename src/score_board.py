@@ -34,6 +34,13 @@ class Score_Board(object):
 		n_list = self.__score_list
 		return n_list	
 
+	def get_best_score(self):
+		if len(self.__score_list) == 0:
+			best = 0
+		else:
+			best = self.__score_list[0]
+		return best
+
 	def save_scores(self, path):
 		dir_name = os.path.dirname(path)
 		if not os.path.exists(dir_name):
