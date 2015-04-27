@@ -2,6 +2,9 @@ import wx
 import wx.lib.stattext as ST
 import board
 import score_board
+from os.path import expanduser
+
+SCORE_FILE_PATH = expanduser('~/.config/my2048/scores.conf')
 
 class My2048_wx(wx.Frame):
 
@@ -20,11 +23,10 @@ class My2048_wx(wx.Frame):
 		self.Construct()
 
 	def Construct(self):
-		self.Bind(wx.EVT_CHAR_HOOK, self.arrow_key_ctrl)
-
 		'''panel_box is the container that contains all the widgets'''
 		self.panel_box = wx.BoxSizer(wx.VERTICAL)
-
+		self.Bind(wx.EVT_CHAR_HOOK, self.arrow_key_ctrl)
+		self.SetFocus()
 		self.generate_header()
 
 		'''play_board is a container where all the tiles are put '''
@@ -111,8 +113,9 @@ class My2048_wx(wx.Frame):
 		self.__current_score = board_object.get_score()
 		self.score.SetLabel(str(self.__current_score))
 		self.__best_score = score_board_object.get_best_score()
-		if self.__current_score > self.__best_score:
+		if self.__current_score >= self.__best_score:
 			self.__best_score = self.__current_score
+			score_board_object.add_score(self.__best_score)
 		self.best.SetLabel(str(self.__best_score))
 		self.upper_header.Layout()
 
@@ -165,10 +168,14 @@ class My2048_wx(wx.Frame):
 			event.Skip()
 
 	def new_game_button_click(self, event):
+		if(self.__current_score >= self.__best_score):
+			score_board_object.add_score(self.__best_score)
+		show_best = score_board_object.get_best_score()
 		board_object.board_data = board_object.initialize_board(2)
+		board_object.set_score(0)
 		self.refresh()
-		self.__current_score = 0
 		self.score.SetLabel(str(self.__current_score))
+		self.best.SetLabel(str(show_best))
 		self.upper_header.Layout()
 
 
