@@ -13,7 +13,7 @@ KEY_MOVE_MAP = {
 
 def print_score_board(score_board):
   for i in score_board.get_scores():
-    print i.name, ' ', i.score
+    print i
 
 if __name__ == "__main__":
   score_board_object = score_board.Score_Board()
@@ -31,8 +31,7 @@ if __name__ == "__main__":
       print board_object.get_score()
       board_object.output()
     final_score = board_object.get_score()
-    player = raw_input("Your score is %d, please enter your name: " % final_score)
-    score_board_object.add_score(final_score, player)
+    score_board_object.add_score(final_score)
     score_board_object.save_scores(SCORE_FILE_PATH)
 
 
