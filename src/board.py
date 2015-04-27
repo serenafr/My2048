@@ -33,7 +33,7 @@ class Board(object):
       base_num[temp[0]][temp[1]] = 2
       index_list.remove(temp)
     return base_num
-  
+
   def rotate(self, board):
     '''Rotate board 90 degree clockwise'''
     new_board = self.generate_board()
@@ -255,3 +255,6 @@ class Board(object):
 
   def get_score(self):
     return self.__score
+
+  def set_score(self, score):
+    self.__score = score
