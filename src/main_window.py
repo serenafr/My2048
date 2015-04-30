@@ -23,17 +23,15 @@ class My2048_wx(wx.Frame):
 		self.Construct()
 
 	def Construct(self):
-		self.main_panel = wx.Panel(self, size = (380, 280))
+		self.main_panel = wx.Panel(self, size = (300, 250))
 		self.main_panel.SetFocus()
 		self.Bind(wx.EVT_CHAR_HOOK, self.arrow_key_ctrl)
 		'''panel_box is the container that contains all the widgets'''
 		self.panel_box = wx.BoxSizer(wx.VERTICAL)
 		self.generate_header()
-
 		'''play_board is a container where all the tiles are put '''
-		self.play_board = wx.GridSizer(self.SIZE, self.SIZE)
+		self.play_board = wx.GridSizer(self.SIZE, self.SIZE, 10, 10)
 		self.generate_playboard()
-
 
 		self.main_panel.SetSizer(self.panel_box)
 		self.Show(True)
@@ -50,7 +48,7 @@ class My2048_wx(wx.Frame):
 		self.upper_header = wx.BoxSizer(wx.HORIZONTAL)
 	
 		self.game_name = ST.GenStaticText(self, -1, label = '2048', 
-			size = (100, 30), style = wx.ALIGN_CENTRE)
+			size = (150, 30), style = wx.ALIGN_CENTRE)
 		self.upper_header.Add(self.game_name, flag = wx.EXPAND|wx.RIGHT, border = 60)
 
 		self.upper_header_score = wx.BoxSizer(wx.VERTICAL)
@@ -77,8 +75,8 @@ class My2048_wx(wx.Frame):
 		'''lower_header contains a sub_title and a button that allows users to start a new game'''
 		self.lower_header = wx.BoxSizer(wx.HORIZONTAL)
 
-		self.sub_title = ST.GenStaticText(self, -1, label = 'Join the numbers and get to the 2048 tile!')
-		self.lower_header.Add(self.sub_title, flag = wx.EXPAND|wx.RIGHT, border = 5)
+		self.sub_title = ST.GenStaticText(self, -1, label = 'Join the numbers and get to the 2048 tile!', size = (280, 20))
+		self.lower_header.Add(self.sub_title, flag = wx.EXPAND|wx.RIGHT, border = 10)
 
 		self.new_game_button = wx.Button(self, -1, label = 'NEW GAME')
 		self.new_game_button.Bind(wx.EVT_BUTTON, self.new_game_button_click)
