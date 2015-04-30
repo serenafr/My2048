@@ -23,10 +23,11 @@ class My2048_wx(wx.Frame):
 		self.Construct()
 
 	def Construct(self):
+		self.main_panel = wx.Panel(self, size = (380, 280))
+		self.main_panel.SetFocus()
+		self.Bind(wx.EVT_CHAR_HOOK, self.arrow_key_ctrl)
 		'''panel_box is the container that contains all the widgets'''
 		self.panel_box = wx.BoxSizer(wx.VERTICAL)
-		self.Bind(wx.EVT_CHAR_HOOK, self.arrow_key_ctrl)
-		self.SetFocus()
 		self.generate_header()
 
 		'''play_board is a container where all the tiles are put '''
@@ -34,7 +35,7 @@ class My2048_wx(wx.Frame):
 		self.generate_playboard()
 
 
-		self.SetSizer(self.panel_box)
+		self.main_panel.SetSizer(self.panel_box)
 		self.Show(True)
 
 
@@ -84,7 +85,6 @@ class My2048_wx(wx.Frame):
 		self.lower_header.Add(self.new_game_button)
 
 		self.header.Add(self.lower_header)
-
 		self.panel_box.Add(self.header, flag = wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP|wx.BOTTOM, 
 			border = 10)
 
@@ -106,8 +106,7 @@ class My2048_wx(wx.Frame):
 			self.__label_list[i].SetBackgroundColour((238, 228, 218))
 			self.play_board.Add(self.__label_list[i], flag = wx.EXPAND|wx.RIGHT|wx.TOP, border = 10)
 
-		self.panel_box.Add(
-			self.play_board, flag = wx.EXPAND|wx.TOP|wx.LEFT, border = 10)
+		self.panel_box.Add(self.play_board, flag = wx.EXPAND|wx.TOP|wx.LEFT, border = 10)
 
 	def refresh(self):
 		self.__current_score = board_object.get_score()
@@ -183,5 +182,5 @@ if __name__ == "__main__":
 	app = wx.App()
 	board_object = board.Board(2)
 	score_board_object = score_board.Score_Board()
-	frame = My2048_wx(None, -1, '2048', (380, 300), board_object, score_board_object)
+	frame = My2048_wx(None, -1, '2048', (400, 300), board_object, score_board_object)
 	app.MainLoop()
